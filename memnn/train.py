@@ -5,6 +5,7 @@ from keras.layers import LSTM
 # from keras.utils import plot_model
 from keras.callbacks import ModelCheckpoint
 from preprocess import Data
+import pickle
 
 data = Data()
 
@@ -91,8 +92,10 @@ model.compile(optimizer='rmsprop', loss='sparse_categorical_crossentropy',
 
 # train
 checkpointer = ModelCheckpoint('model_{epoch:02d}_{val_acc:.2f}.h5')
-model.fit([inputs_train, queries_train], answers_train,
+history = model.fit([inputs_train, queries_train], answers_train,
           batch_size=32,
           epochs=120,
           validation_data=([inputs_test, queries_test], answers_test),
           callbacks=[checkpointer])
+with open('history.pkl', 'wb') as f:
+    pickle.dump(history.history, f)

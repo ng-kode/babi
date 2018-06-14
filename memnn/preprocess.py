@@ -87,7 +87,7 @@ class Data():
             # QA2 with 10,000 samples
             'two_supporting_facts_10k': 'tasks_1-20_v1-2/en-10k/qa2_two-supporting-facts_{}.txt',
         }
-        challenge_type = 'single_supporting_fact_10k'
+        challenge_type = 'two_supporting_facts_10k'
         challenge = challenges[challenge_type]
 
         print('Extracting stories for the challenge:', challenge_type)
@@ -135,17 +135,6 @@ class Data():
         print('answers: binary (1 or 0) tensor of shape (samples, vocab_size)')
         print('answers_train shape:', self.answers_train.shape)
         print('answers_test shape:', self.answers_test.shape)
-        print('-')
-        print("""Available data attributes:
-                story_maxlen
-                query_maxlen
-                vocab_size
-                inputs_train
-                queries_train
-                answers_train
-                inputs_test
-                queries_test
-                answers_test""")
         print('-')
         print('preprocessing complete !')
 

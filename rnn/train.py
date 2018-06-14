@@ -3,6 +3,7 @@ from preprocess import Data
 from keras.utils import plot_model
 from keras.models import Model
 from keras.callbacks import ModelCheckpoint
+import pickle
 
 data = Data()
 
@@ -52,10 +53,8 @@ model.summary()
 checkpointer = ModelCheckpoint('model_{epoch:02d}_{val_acc:.2f}.h5')
 model.fit([inputs_train, queries_train], answers_train, 
           epochs=40, 
-          validation_split=0.05,
+          validation_data=([inputs_test, queries_test], answers_test),
           callbacks=[checkpointer])
-
-loss, acc = model.evaluate([inputs_test, queries_test], answers_test)
-print('Test loss, acc: {:.4f}, {:.4f}'.format(loss, acc))
-
+with open('history.pkl', 'wb') as f:
+    pickle.dump(history.history, f)
 
