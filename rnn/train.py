@@ -51,7 +51,7 @@ model.summary()
 # plot_model(model, 'model.png', show_shapes=True)
 
 checkpointer = ModelCheckpoint('model_{epoch:02d}_{val_acc:.2f}.h5')
-model.fit([inputs_train, queries_train], answers_train, 
+history = model.fit([inputs_train, queries_train], answers_train, 
           epochs=40, 
           validation_data=([inputs_test, queries_test], answers_test),
           callbacks=[checkpointer])
