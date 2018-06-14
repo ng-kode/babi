@@ -24,7 +24,7 @@ story_vec, question_vec, _ = data.vectorize_stories([
 
 print('-')
 print('loading model...')
-model = load_model('model_30_1.00.h5')
+model = load_model('model_25_1.00.h5')
 print('-')
 print('predicting...')
 preds = model.predict([story_vec, question_vec])

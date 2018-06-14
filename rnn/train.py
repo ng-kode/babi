@@ -2,7 +2,7 @@ from keras.layers import Input, Embedding, LSTM, GRU, Dropout, add, RepeatVector
 from preprocess import Data
 from keras.utils import plot_model
 from keras.models import Model
-from keras.callbacks import ModelCheckpoint, EarlyStopping
+from keras.callbacks import ModelCheckpoint
 
 data = Data()
 
@@ -50,7 +50,6 @@ model.summary()
 # plot_model(model, 'model.png', show_shapes=True)
 
 checkpointer = ModelCheckpoint('model_{epoch:02d}_{val_acc:.2f}.h5')
-earlystopper = EarlyStopping(monitor='val_acc', verbose=2)
 model.fit([inputs_train, queries_train], answers_train, 
           epochs=40, 
           validation_split=0.05,
