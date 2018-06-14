@@ -58,20 +58,27 @@ def get_stories(f, only_supporting=False, max_length=None):
 
 class Data():
     def __init__(self):
-        try:
-            path = get_file('babi-tasks-v1-2.tar.gz', origin='https://s3.amazonaws.com/text-datasets/babi_tasks_1-20_v1-2.tar.gz')
-        except:
-            print('Error downloading dataset, please download it manually:\n'
-                    '$ wget http://www.thespermwhale.com/jaseweston/babi/tasks_1-20_v1-2.tar.gz\n'
-                    '$ mv tasks_1-20_v1-2.tar.gz ~/.keras/datasets/babi-tasks-v1-2.tar.gz')
-            raise
+        # try:
+        #     path = get_file('babi-tasks-v1-2.tar.gz', origin='https://s3.amazonaws.com/text-datasets/babi_tasks_1-20_v1-2.tar.gz')
+        # except:
+        #     print('Error downloading dataset, please download it manually:\n'
+        #             '$ wget http://www.thespermwhale.com/jaseweston/babi/tasks_1-20_v1-2.tar.gz\n'
+        #             '$ mv tasks_1-20_v1-2.tar.gz ~/.keras/datasets/babi-tasks-v1-2.tar.gz')
+        #     raise
         # Default QA1 with 1000 samples
         # challenge = 'tasks_1-20_v1-2/en/qa1_single-supporting-fact_{}.txt'
         # QA1 with 10,000 samples
-        challenge = 'tasks_1-20_v1-2/en-10k/qa1_single-supporting-fact_{}.txt'
-        with tarfile.open(path) as tar:
-            train_stories = get_stories(tar.extractfile(challenge.format('train')))
-            test_stories = get_stories(tar.extractfile(challenge.format('test')))
+        # challenge = 'tasks_1-20_v1-2/en-10k/qa1_single-supporting-fact_{}.txt'
+        # with tarfile.open(path) as tar:
+        #     train_stories = get_stories(tar.extractfile(challenge.format('train')))
+        #     test_stories = get_stories(tar.extractfile(challenge.format('test')))
+
+        challenge = 'qa1_single-supporting-fact_{}.txt'
+        with open(challenge.format('train'), 'rb') as f:
+            train_stories = get_stories(f)
+
+        with open(challenge.format('test'), 'rb') as f:
+            test_stories = get_stories(f)
 
         vocab = set()
         for story, q, answer in train_stories + test_stories:
@@ -98,6 +105,8 @@ class Data():
         print('-')
         print('Vectorizing the word sequences...')
        
+        np.random.shuffle(train_stories)
+        np.random.shuffle(test_stories)
         self.inputs_train, self.queries_train, self.answers_train = self.vectorize_stories(train_stories)
         self.inputs_test, self.queries_test, self.answers_test = self.vectorize_stories(test_stories)
 

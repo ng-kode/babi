@@ -12,8 +12,8 @@ def tokenize(sent):
 
 data = Data()
 
-story = tokenize('John went to the hallway. Mary went to the kitchen')
-question = tokenize('Where is Mary ?')
+story = tokenize('Sandra went to the beach. John went to the hallway')
+question = tokenize('Where is Sandra ?')
 # this is just an dummy answer 
 # which won't be used in our inference process
 _ = 'bathroom'
@@ -24,7 +24,7 @@ story_vec, question_vec, _ = data.vectorize_stories([
 
 print('-')
 print('loading model...')
-model = load_model('model_10K_24_1.00.h5')
+model = load_model('model_30_1.00.h5')
 print('-')
 print('predicting...')
 preds = model.predict([story_vec, question_vec])
