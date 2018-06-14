@@ -17,7 +17,8 @@ from keras.layers import Input, Activation, Dense, Permute, Dropout, add, dot, c
 from keras.layers import LSTM
 from keras.utils.data_utils import get_file
 from keras.preprocessing.sequence import pad_sequences
-from keras.utils import plot_model
+# from keras.utils import plot_model
+from keras.callbacks import ModelCheckpoint
 from functools import reduce
 import tarfile
 import numpy as np
@@ -213,10 +214,12 @@ model.compile(optimizer='rmsprop', loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
 # create model.png
-plot_model(model, 'model.png', show_shapes=True)
+# plot_model(model, 'model.png', show_shapes=True)
 
 # train
-# model.fit([inputs_train, queries_train], answers_train,
-#           batch_size=32,
-#           epochs=120,
-#           validation_data=([inputs_test, queries_test], answers_test))
+checkpointer = ModelCheckpoint('model.{epoch:02d}.{val_acc:.2f}.h5')
+model.fit([inputs_train, queries_train], answers_train,
+          batch_size=32,
+          epochs=120,
+          validation_data=([inputs_test, queries_test], answers_test),
+          callbacks=[checkpointer])
