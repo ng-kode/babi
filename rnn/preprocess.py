@@ -14,17 +14,6 @@ def tokenize(sent):
     '''
     return [x.strip() for x in re.split('(\W+)?', sent) if x.strip()]
 
-def get_stories(f, only_supporting=False, max_length=None):
-    '''Given a file name, read the file, retrieve the stories,
-    and then convert the sentences into a single story.
-    If max_length is supplied,
-    any stories longer than max_length tokens will be discarded.
-    '''
-    data = parse_stories(f.readlines(), only_supporting=only_supporting)
-    flatten = lambda data: reduce(lambda x, y: x + y, data)
-    data = [(flatten(story), q, answer) for story, q, answer in data if not max_length or len(flatten(story)) < max_length]
-    return data
-
 def parse_stories(lines, only_supporting=False):
     '''Parse stories provided in the bAbi tasks format
     If only_supporting is true,
@@ -56,6 +45,17 @@ def parse_stories(lines, only_supporting=False):
             story.append(sent)
     return data
 
+def get_stories(f, only_supporting=False, max_length=None):
+    '''Given a file name, read the file, retrieve the stories,
+    and then convert the sentences into a single story.
+    If max_length is supplied,
+    any stories longer than max_length tokens will be discarded.
+    '''
+    data = parse_stories(f.readlines(), only_supporting=only_supporting)
+    flatten = lambda data: reduce(lambda x, y: x + y, data)
+    data = [(flatten(story), q, answer) for story, q, answer in data if not max_length or len(flatten(story)) < max_length]
+    return data
+
 class Data():
     def __init__(self):
         try:
@@ -66,9 +66,9 @@ class Data():
                     '$ mv tasks_1-20_v1-2.tar.gz ~/.keras/datasets/babi-tasks-v1-2.tar.gz')
             raise
         # Default QA1 with 1000 samples
-        challenge = 'tasks_1-20_v1-2/en/qa1_single-supporting-fact_{}.txt'
+        # challenge = 'tasks_1-20_v1-2/en/qa1_single-supporting-fact_{}.txt'
         # QA1 with 10,000 samples
-        # challenge = 'tasks_1-20_v1-2/en-10k/qa1_single-supporting-fact_{}.txt'
+        challenge = 'tasks_1-20_v1-2/en-10k/qa1_single-supporting-fact_{}.txt'
         with tarfile.open(path) as tar:
             train_stories = get_stories(tar.extractfile(challenge.format('train')))
             test_stories = get_stories(tar.extractfile(challenge.format('test')))
