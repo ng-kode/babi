@@ -7,12 +7,16 @@ from keras.callbacks import ModelCheckpoint
 from preprocess import Data
 
 data = Data()
+
 story_maxlen = data.story_maxlen
 query_maxlen = data.query_maxlen
+
 vocab_size = data.vocab_size
+
 inputs_train = data.inputs_train
 queries_train = data.queries_train
 answers_train = data.answers_train
+
 inputs_test = data.inputs_test
 queries_test = data.queries_test
 answers_test = data.answers_test
