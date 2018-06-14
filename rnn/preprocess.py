@@ -80,6 +80,9 @@ class Data():
 
         # Reserve 0 for masking via pad_sequences
         self.vocab_size = len(vocab) + 1
+        self.word_idx = dict((c, i + 1) for i, c in enumerate(vocab))
+        with open('word_idx.pkl', 'wb') as f:
+            pickle.dump(self.word_idx, f)
         self.story_maxlen = max(map(len, (x for x, _, _ in train_stories + test_stories)))
         self.query_maxlen = max(map(len, (x for _, x, _ in train_stories + test_stories)))
 
@@ -94,10 +97,7 @@ class Data():
         print(train_stories[0])
         print('-')
         print('Vectorizing the word sequences...')
-
-        self.word_idx = dict((c, i + 1) for i, c in enumerate(vocab))
-        with open('word_idx.pkl', 'wb') as f:
-            pickle.dump(self.word_idx, f)
+       
         self.inputs_train, self.queries_train, self.answers_train = self.vectorize_stories(train_stories)
         self.inputs_test, self.queries_test, self.answers_test = self.vectorize_stories(test_stories)
 
@@ -137,7 +137,11 @@ class Data():
         for story, query, answer in data:
             inputs.append([self.word_idx[w] for w in story])
             queries.append([self.word_idx[w] for w in query])
-            answers.append(self.word_idx[answer])
+            
+            a_idx = self.word_idx[answer]            
+            a_oht = np.zeros(len(self.word_idx) + 1)
+            a_oht[a_idx] = 1.
+            answers.append(a_oht)
         return (pad_sequences(inputs, maxlen=self.story_maxlen),
                 pad_sequences(queries, maxlen=self.query_maxlen),
                 np.array(answers))
